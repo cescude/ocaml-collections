@@ -81,7 +81,7 @@ module Iterator = struct
 
   let rec drop count s = if count <= 0
     then s
-    else (next s; drop (count - 1) s)
+    else let _ = next s in drop (count - 1) s
 
   let take count s =
     let taken = ref 0
@@ -112,4 +112,19 @@ module Iterator = struct
       else None
     in
     make taker
+end
+
+module Iterator_utils = struct
+  open Iterator
+
+  let readLines filename =
+    let ic = open_in filename in
+    make (fun () ->
+        try
+          let line = input_line ic in
+          Some line
+        with End_of_file ->
+          close_in ic;
+          None
+      )
 end
