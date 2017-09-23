@@ -117,12 +117,11 @@ end
 module Iterator_utils = struct
   open Iterator
 
-  let readLines filename =
+  let read_lines filename =
     let ic = open_in filename in
     make (fun () ->
         try
-          let line = input_line ic in
-          Some line
+          Some (input_line ic)
         with End_of_file ->
           close_in ic;
           None
